@@ -22,7 +22,11 @@ public class AppUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		return userRepo.fetchUserDetails(username);
+		UserDetails userDetails = userRepo.fetchUserDetails(username);
+		if(userDetails == null) {
+			throw new UsernameNotFoundException(String.format("Username %s not found!", username)); 
+		}
+		return userDetails;
 	}
 
 }
