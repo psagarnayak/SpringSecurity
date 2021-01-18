@@ -27,40 +27,45 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.GET, "/api/students/**")
-				.hasAuthority(UserAuthorities.STUDENT_READ.name()).antMatchers(HttpMethod.POST, "/api/students/**")
-				.hasAuthority(UserAuthorities.STUDENT_ADD.name()).antMatchers(HttpMethod.PUT, "/api/students/**")
-				.hasAuthority(UserAuthorities.STUDENT_UPDATE.name()).antMatchers(HttpMethod.DELETE, "/api/students/**")
-				.hasAuthority(UserAuthorities.STUDENT_DELETE.name()).anyRequest().authenticated().and().httpBasic();
+		http.csrf().disable().authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/api/students/**").hasAuthority(UserAuthorities.STUDENT_READ.name())
+		.antMatchers(HttpMethod.POST, "/api/students/**").hasAuthority(UserAuthorities.STUDENT_ADD.name())
+		.antMatchers(HttpMethod.PUT, "/api/students/**").hasAuthority(UserAuthorities.STUDENT_UPDATE.name())
+		.antMatchers(HttpMethod.DELETE, "/api/students/**").hasRole(UserRoles.ADMIN.name())
+		.anyRequest().authenticated().and().httpBasic();
 	}
 
 	@Override
 	@Bean
 	protected UserDetailsService userDetailsService() {
-		// TODO Auto-generated method stub
+		
+		// Either specify roles or authorities
+		// If we specify both, authorities will overwrite roles.
+		
 		UserDetails annaUserDetails = User.builder().passwordEncoder(passwordEncoder::encode)
-				.username("anna").password("apwd").roles(UserRoles.STUDENT.name())
-				.authorities(UserRoles.STUDENT.getAuthorities().stream()
-				.map(UserAuthorities::name).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+				.username("anna").password("apwd")
+				//.roles(UserRoles.STUDENT.name())
+				.authorities(UserRoles.STUDENT.getGrantedAuthorities())
 				.build();
 
 		UserDetails mikeUserDetails = User.builder().passwordEncoder(passwordEncoder::encode)
-				.username("mike").password("mpwd").roles(UserRoles.CLERK.name())
-				.authorities(UserRoles.CLERK.getAuthorities().stream()
-				.map(UserAuthorities::name).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+				.username("mike").password("mpwd")
+				//.roles(UserRoles.CLERK.name())
+				.authorities(UserRoles.CLERK.getGrantedAuthorities())
 				.build();
 
 		UserDetails wilsonUserDetails = User.builder().passwordEncoder(passwordEncoder::encode)
-				.username("wilson").password("wpwd").roles(UserRoles.CLERK.name())
-				.authorities(UserRoles.CLERK.getAuthorities().stream()
-				.map(UserAuthorities::name).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+				.username("wilson").password("wpwd")
+				//.roles(UserRoles.CLERK.name())
+				.authorities(UserRoles.CLERK.getGrantedAuthorities())
 				.build();
 
 		UserDetails frankUserDetails = User.builder().passwordEncoder(passwordEncoder::encode)
-				.username("frank").password("fpwd").roles(UserRoles.ADMIN.name())
-				.authorities(UserRoles.ADMIN.getAuthorities().stream()
-				.map(UserAuthorities::name).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+				.username("frank").password("fpwd")
+				//.roles(UserRoles.ADMIN.name())
+				.authorities(UserRoles.ADMIN.getGrantedAuthorities())
 				.build();
+		
 
 		return new InMemoryUserDetailsManager(annaUserDetails, mikeUserDetails, wilsonUserDetails, frankUserDetails);
 	}
