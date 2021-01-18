@@ -48,7 +48,7 @@ public enum UserRoles {
 	}
 
 	public Set<GrantedAuthority> getGrantedAuthorities() {
-		Set<GrantedAuthority> grantedAuthorities = this.authorities.stream().map(UserAuthorities::name).map(SimpleGrantedAuthority::new)
+		Set<GrantedAuthority> grantedAuthorities = this.authorities.stream().map(UserAuthorities::getAuthority).map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toSet());
 		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
 		return grantedAuthorities;

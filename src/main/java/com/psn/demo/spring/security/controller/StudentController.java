@@ -24,11 +24,18 @@ public class StudentController {
 			new Student(2, "Second Student"), new Student(3, "Third Student"), new Student(4, "Fourth Student"),
 			new Student(5, "Fifth Student")));
 
+	// PreAuthorize can be used instead of specifying ant matchers in Security Config.
+	// First add: @EnableGlobalMethodSecurity(prePostEnabled=true) to SecurityConfi class
+	// Then specify PreAuth in any of the below formats
+	// @PreAuthorize("hasRole('ROLE_ADMIN')")
+	// @PreAuthorize("hasAnyRole('Role_CLERK', 'ROLE_ADMIN')")
+	// @PreAuthorize("hasAuthority('student_read'))
+	// @PreAuthorize("hasAuthority('student_add', 'student_update')")
 	@GetMapping("")
 	public List<Student> getAllStudents() {
 		return this.studentList;
 	}
-	
+
 	@GetMapping("/{id}")
 	public Student getStudentById(@PathVariable("id") long studentId) {
 		return studentList.stream().filter(st -> st.getId() == studentId).findFirst().orElse(null);
