@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.psn.demo.spring</groupId>
-	<artifactId>Security</artifactId>
+	<artifactId>JWTAuth</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SpringSecurity</name>
-	<description>Demo project for Spring Boot Security</description>
+	<description>Demo project for Spring Boot Security using InMemory and JWT Auth</description>
 
 	<properties>
 		<java.version>11</java.version>
